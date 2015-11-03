@@ -17,6 +17,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -277,20 +279,26 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
 					File dest = new File(this.selectedDir.getAbsolutePath() + File.separator + dossierRng + File.separator + nom);
 					if(!dest.exists()){
 					    f.renameTo(dest);
-					    System.out.println(nom + " rangÃ© dans " + dossierRng);
+					    System.out.println(nom + " rangé dans " + dossierRng);
 					    i++;
 					}
 				}
 			}
 		}
 
-		System.out.println("Fin du traitement. ( " + i + "/" + tousLesFichiers.length + " fichier(s) rangÃ©(s). )");
+		System.out.println("Fin du traitement. ( " + i + "/" + tousLesFichiers.length + " fichier(s) rangé(s). )");
 		
 		this.refreshList();
 	}
 
 	private String getDossierRangement(String nom) {
 		String nomDossier = nom.substring(0, 1).toUpperCase();
+		Pattern p = Pattern.compile("(?i)((le(s)?)*(la)*(un(e)?)*(des)*\\s).*");
+		Matcher m = p.matcher(nom);
+		if(m.matches() && m.groupCount()>=1 && m.group(1) != null){
+			System.out.println("match");
+			nomDossier = nom.substring(m.group(1).length(),m.group(1).length()+1).toUpperCase();
+		}
 		File dest = new File(this.selectedDir.getAbsolutePath() + File.separator + nomDossier);
 		if(dest.exists()){
 			if(dest.isDirectory()){
@@ -298,7 +306,7 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
 			}
 		}
 		else{
-			//crÃ©er le dossier
+			//créer le dossier
 			if(dest.mkdir()){
 				System.out.println("Dossier " + nomDossier + " créé.");
 				return nomDossier;
