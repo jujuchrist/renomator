@@ -8,6 +8,8 @@ public class TraiteurDeNoms {
 	private boolean doRemoveNonChar = true;
 	private boolean doRemoveAccolades = true;
 	private boolean doRemoveParentheses = true;
+	private boolean doRemoveDates = true;
+	private boolean doRemoveAfterAny = false;
 	
 	public String traiter(String nom) {
 		String oldName = nom;
@@ -17,11 +19,16 @@ public class TraiteurDeNoms {
 		nom = nom.substring(0, nom.lastIndexOf(".")).toLowerCase();
 		
 		for(int i = 0; i<this.remplacements.size()-1; i+=2){
+			if(this.doRemoveAfterAny)
+				nom = nom.replaceAll("(?i)" + this.remplacements.get(i).toLowerCase() + ".*", this.remplacements.get(i+1).toLowerCase());
 			nom = nom.replaceAll("(?i)" + this.remplacements.get(i).toLowerCase(), this.remplacements.get(i+1).toLowerCase());
 		}
 		
 		if(this.doRemoveParentheses)
 			nom = nomSansParentheses(nom);
+		
+		if(this.doRemoveDates)
+			nom = nomSansDates(nom);
 		
 		if(this.doRemoveAccolades)
 			nom = nomSansAccolades(nom);
@@ -47,31 +54,48 @@ public class TraiteurDeNoms {
 		return nom;
 	} 
 	
+	private String nomSansDates(String nom) {
+		if(this.doRemoveAfterAny)
+			return nom.replaceAll("[\\d]{4}.*"," ");
+
+		return nom.replaceAll("[\\d]{4}"," ");
+	}
+
 	public void setParametres(boolean pDoAddMajuscule, 
 			boolean pDoDeleteSpaces, 
 			boolean pDoRemoveNonChar, 
 			boolean pDoRemoveAccolades, 
 			boolean pDoRemoveParentheses, 
+			boolean pDoRemoveDates, 
+			boolean pDoRemoveAfterAny, 
 			String pListMotsSuppr){
 		doAddMajuscule = pDoAddMajuscule;
 		doDeleteSpaces = pDoDeleteSpaces;
 		doRemoveNonChar = pDoRemoveNonChar;
 		doRemoveAccolades = pDoRemoveAccolades;
 		doRemoveParentheses = pDoRemoveParentheses;
+		doRemoveDates = pDoRemoveDates;
+		doRemoveAfterAny = pDoRemoveAfterAny;
 		this.remplacements.clear();
 		
 		String[] lstMots = pListMotsSuppr.split(";");
 		for(String mot : lstMots){
-			if(mot.trim() != "")
+			if(mot.matches(".*")){
 				this.addRemplacement(mot.trim(), " ");
+				System.out.println("supprimer \"" + mot.trim() + "\"");
+			}
 		}
 	}
 
 	private String nomSansAccolades(String nom) {
+		if(this.doRemoveAfterAny)
+			return nom.replaceAll("\\[[^\\]\\[]*\\].*"," ");
 		return nom.replaceAll("\\[[^\\]\\[]*\\]"," ");
 	}
 
 	private String nomSansParentheses(String nom) {
+		if(this.doRemoveAfterAny)
+			return nom.replaceAll("\\([^\\(\\)]*\\).*"," ");
 		return nom.replaceAll("\\([^\\(\\)]*\\)"," ");
 	}
 

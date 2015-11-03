@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -17,6 +18,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Vector;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
@@ -27,6 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.border.Border;
 
 
 public class FenetreRenomator extends JFrame implements MouseListener, WindowListener{
@@ -49,16 +52,18 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
 	
 	private boolean traitementAJour = false;
 	private JCheckBox chkDoAddMajuscule;
-	private JCheckBox chkDooDeleteSpaces;
-	private JCheckBox chkDooRemoveNonChar;
-	private JCheckBox chkDooRemoveAccolades;
-	private JCheckBox chkDooRemoveParentheses;
+	private JCheckBox chkDoDeleteSpaces;
+	private JCheckBox chkDoRemoveNonChar;
+	private JCheckBox chkDoRemoveAccolades;
+	private JCheckBox chkDoRemoveParentheses;
+	private JCheckBox chkDoRemoveDate;
+	private JCheckBox chkDoRemoveAfterAny;
 	private JTextArea motsSuppField;
 
 	public FenetreRenomator(){    
 		this.addWindowListener(this);
 		this.setTitle("");
-	    this.setMinimumSize(new Dimension(1000, 400));
+	    this.setMinimumSize(new Dimension(1000, 600));
 	    this.setLocationRelativeTo(null);            
 	 
 	    this.layoutMain = new GridBagLayout();
@@ -66,6 +71,8 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
 	    
 	    GridBagConstraints gbc = new GridBagConstraints();
 	    //gbc.fill = GridBagConstraints.BOTH;
+	    
+		Border bdr = BorderFactory.createLineBorder(Color.GRAY, 1);
 	    
 	    //On ajoute les boutons au panel droit
 	    int yGrid = 1;
@@ -100,24 +107,30 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
 	    this.getContentPane().add(this.confPanel = new JPanel(),gbc);
 	    
 	    this.chkDoAddMajuscule = new JCheckBox("Mettre majuscule");
-	    this.chkDooDeleteSpaces = new JCheckBox("Supprimer espaces");
-	    this.chkDooRemoveNonChar = new JCheckBox("Supprimer caractères speciaux");
-	    this.chkDooRemoveAccolades = new JCheckBox("Supprimer accolades");
-	    this.chkDooRemoveParentheses = new JCheckBox("Supprimer parenthèses");
+	    this.chkDoDeleteSpaces = new JCheckBox("Supprimer espaces");
+	    this.chkDoRemoveNonChar = new JCheckBox("Supprimer caractères speciaux");
+	    this.chkDoRemoveAccolades = new JCheckBox("Supprimer accolades");
+	    this.chkDoRemoveParentheses = new JCheckBox("Supprimer parenthèses");
+	    this.chkDoRemoveDate = new JCheckBox("Supprimer dates");
+	    this.chkDoRemoveAfterAny = new JCheckBox("Supprimer tout après l'un des précédants");
 	    
 	    this.chkDoAddMajuscule.setSelected(true);
-	    this.chkDooDeleteSpaces.setSelected(true);
-	    this.chkDooRemoveNonChar.setSelected(true);
-	    this.chkDooRemoveAccolades.setSelected(true);
-	    this.chkDooRemoveParentheses.setSelected(true);
+	    this.chkDoDeleteSpaces.setSelected(true);
+	    this.chkDoRemoveNonChar.setSelected(true);
+	    this.chkDoRemoveAccolades.setSelected(true);
+	    this.chkDoRemoveParentheses.setSelected(true);
+	    this.chkDoRemoveDate.setSelected(true);
+	    this.chkDoRemoveAfterAny.setSelected(false);
 	    
-	    this.confPanel.setLayout(new GridLayout(5,1));
+	    this.confPanel.setLayout(new GridLayout(7,1));
 	    
 	    this.confPanel.add(chkDoAddMajuscule);
-	    this.confPanel.add(chkDooDeleteSpaces);
-	    this.confPanel.add(chkDooRemoveNonChar);
-	    this.confPanel.add(chkDooRemoveAccolades);
-	    this.confPanel.add(chkDooRemoveParentheses);		
+	    this.confPanel.add(chkDoDeleteSpaces);
+	    this.confPanel.add(chkDoRemoveNonChar);
+	    this.confPanel.add(chkDoRemoveAccolades);
+	    this.confPanel.add(chkDoRemoveParentheses);
+	    this.confPanel.add(chkDoRemoveDate);
+	    this.confPanel.add(chkDoRemoveAfterAny);
 	    
 	    //--liste des mots Ã  supprimer
 	    gbc.gridwidth = 1;
@@ -125,13 +138,14 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
 	    gbc.gridx = 0;
 	    gbc.gridy = yGrid++;
 	    gbc.weightx = 1.0;
-	    gbc.weighty = 1.0;
+	    gbc.weighty = 4.0;
 	   /* this.getContentPane().add(this.motsSuppPanel = new JPanel(),gbc);
 	    this.confPanel.setLayout(new GridLayout(5,1));*/
 	    this.getContentPane().add(this.motsSuppField = new JTextArea(),gbc);
-	    this.motsSuppField.setPreferredSize(new Dimension(250, 30));
-		this.motsSuppField.setMinimumSize(new Dimension(250, 30));
-		this.motsSuppField.setMaximumSize(new Dimension(250, 30));
+	    this.motsSuppField.setPreferredSize(new Dimension(250, 120));
+		this.motsSuppField.setMinimumSize(new Dimension(250, 120));
+		this.motsSuppField.setMaximumSize(new Dimension(250, 120));
+		this.motsSuppField.setBorder(bdr);
 
 	    //-- 
 	    gbc.gridwidth = 1;
@@ -181,7 +195,7 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
             	bufferedWriter.write("**" + this.selectedDir.getAbsolutePath() + "**");
             }
 
-            bufferedWriter.write(this.motsSuppField.getText());
+            bufferedWriter.write(this.motsSuppField.getText().trim());
             		
             // Always close files.
             bufferedWriter.close();
@@ -201,7 +215,7 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
             while((ligne = bufferedReader.readLine()) != null) {
             	listMots += ligne + "\n";
             }   
-
+            listMots.trim();
             bufferedReader.close();        
 
         }
@@ -297,10 +311,12 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
 		System.out.println("Début du traitement.");
 		
 		this.traiteur.setParametres(this.chkDoAddMajuscule.isSelected(), 
-				this.chkDooDeleteSpaces.isSelected(), 
-				this.chkDooRemoveNonChar.isSelected(), 
-				this.chkDooRemoveAccolades.isSelected(), 
-				this.chkDooRemoveParentheses.isSelected(),
+				this.chkDoDeleteSpaces.isSelected(), 
+				this.chkDoRemoveNonChar.isSelected(), 
+				this.chkDoRemoveAccolades.isSelected(), 
+				this.chkDoRemoveParentheses.isSelected(),
+				this.chkDoRemoveDate.isSelected(),
+				this.chkDoRemoveAfterAny.isSelected(),
 				this.motsSuppField.getText());
 		
 		File[] tousLesFichiers = this.getListeFichiers();
