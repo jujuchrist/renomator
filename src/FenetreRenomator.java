@@ -21,6 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
@@ -63,8 +64,10 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
 	private JTextArea motsSuppField;
 
 	public FenetreRenomator(){    
+		ImageIcon img = new ImageIcon(getClass().getResource("/ressources/icon.png"));
+		this.setIconImage(img.getImage());
 		this.addWindowListener(this);
-		this.setTitle("");
+		this.setTitle("Rennomator");
 	    this.setMinimumSize(new Dimension(1000, 600));
 	    this.setLocationRelativeTo(null);            
 	 
