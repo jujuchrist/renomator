@@ -46,7 +46,7 @@ public class TraiteurDeNoms {
 	    }
 	    
 		return nom;
-	}
+	} 
 	
 	public void setParametres(boolean pDoAddMajuscule, 
 			boolean pDoDeleteSpaces, 
@@ -63,7 +63,8 @@ public class TraiteurDeNoms {
 		
 		String[] lstMots = pListMotsSuppr.split(";");
 		for(String mot : lstMots){
-			this.addRemplacement(mot, " ");
+			if(mot.trim() != "")
+				this.addRemplacement(mot, " ");
 		}
 	}
 

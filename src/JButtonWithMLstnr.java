@@ -12,6 +12,6 @@ public class JButtonWithMLstnr extends JButton {
 		this.setMinimumSize(new Dimension(250, 30));
 		this.setMaximumSize(new Dimension(250, 30));
 		this.addMouseListener(pMouseListener);
-	}
+	} 
 
 }

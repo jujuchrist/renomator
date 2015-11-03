@@ -133,7 +133,7 @@ public class FenetreRenomator extends JFrame implements MouseListener{
 		this.motsSuppField.setMinimumSize(new Dimension(250, 30));
 		this.motsSuppField.setMaximumSize(new Dimension(250, 30));
 
-	    //--
+	    //-- 
 	    gbc.gridwidth = 1;
 	    gbc.gridheight= 1;
 	    gbc.gridx = 0;
