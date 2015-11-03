@@ -33,10 +33,7 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-<<<<<<< HEAD
 	private static final String FILENAMECONF = "datas";
-=======
->>>>>>> origin/master
 	private GridBagLayout layoutMain;
 	
 	private JButton btnChoixDossier;
