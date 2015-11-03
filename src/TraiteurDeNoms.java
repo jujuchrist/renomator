@@ -48,12 +48,23 @@ public class TraiteurDeNoms {
 		return nom;
 	}
 	
-	public void setParametres(boolean pDoAddMajuscule, boolean pDoDeleteSpaces, boolean pDoRemoveNonChar, boolean pDoRemoveAccolades, boolean pDoRemoveParentheses){
+	public void setParametres(boolean pDoAddMajuscule, 
+			boolean pDoDeleteSpaces, 
+			boolean pDoRemoveNonChar, 
+			boolean pDoRemoveAccolades, 
+			boolean pDoRemoveParentheses, 
+			String pListMotsSuppr){
 		doAddMajuscule = pDoAddMajuscule;
 		doDeleteSpaces = pDoDeleteSpaces;
 		doRemoveNonChar = pDoRemoveNonChar;
 		doRemoveAccolades = pDoRemoveAccolades;
 		doRemoveParentheses = pDoRemoveParentheses;
+		this.remplacements.clear();
+		
+		String[] lstMots = pListMotsSuppr.split(";");
+		for(String mot : lstMots){
+			this.addRemplacement(mot, " ");
+		}
 	}
 
 	private String nomSansAccolades(String nom) {
