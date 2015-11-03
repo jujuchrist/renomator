@@ -1,20 +1,14 @@
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.Vector;
 
-import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
@@ -33,16 +27,12 @@ public class FenetreRenomator extends JFrame implements MouseListener{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private GridLayout layoutDroit;
-	private GridLayout layoutGauche;
-	private JPanel panelDroit;
-	private JPanel panelGauche;
 	private GridBagLayout layoutMain;
 	
 	private JButton btnChoixDossier;
 	private JLabel textePathDossier;
 	private File selectedDir = null;
-	private JList listFichier;
+	private JList<String> listFichier;
 	private JButtonWithMLstnr btnLancerTraitement;
 	private JButtonWithMLstnr btnRanger;
 	private JPanel confPanel;
@@ -101,9 +91,9 @@ public class FenetreRenomator extends JFrame implements MouseListener{
 	    
 	    this.chkDoAddMajuscule = new JCheckBox("Mettre majuscule");
 	    this.chkDooDeleteSpaces = new JCheckBox("Supprimer espaces");
-	    this.chkDooRemoveNonChar = new JCheckBox("Supprimer caractÃ¨res speciaux");
+	    this.chkDooRemoveNonChar = new JCheckBox("Supprimer caractères speciaux");
 	    this.chkDooRemoveAccolades = new JCheckBox("Supprimer accolades");
-	    this.chkDooRemoveParentheses = new JCheckBox("Supprimer parenthÃ¨ses");
+	    this.chkDooRemoveParentheses = new JCheckBox("Supprimer parenthèses");
 	    
 	    this.chkDoAddMajuscule.setSelected(true);
 	    this.chkDooDeleteSpaces.setSelected(true);
@@ -159,7 +149,7 @@ public class FenetreRenomator extends JFrame implements MouseListener{
 	    gbc.fill = GridBagConstraints.BOTH;
 	    JScrollPane scrollPane = new JScrollPane();
 	    this.getContentPane().add(scrollPane,gbc);
-	    this.listFichier = new JList();
+	    this.listFichier = new JList<String>();
 	    scrollPane.setViewportView(this.listFichier);
 	    //scrollPane.setMinimumSize(new Dimension(250, 250));
 	    //scrollPane.setMaximumSize(new Dimension(250, 250));
@@ -189,18 +179,19 @@ public class FenetreRenomator extends JFrame implements MouseListener{
 		
 		if(!this.traitementAJour){
 			JOptionPane jop = new JOptionPane();            
-			int option = jop.showConfirmDialog(null, "Les fichiers n'ont pas Ã©tÃ© traitÃ©s ! Voulez-vous tout de mÃªme les ranger ?", "Attention", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+			@SuppressWarnings("static-access")
+			int option = jop.showConfirmDialog(null, "Les fichiers n'ont pas été traités ! Voulez-vous tout de même les ranger ?", "Attention", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 			            
 			if(option != JOptionPane.OK_OPTION){
 				return; 
 			}
 		}
 		
-		System.out.println("DÃ©but du rangement.");
+		System.out.println("Début du rangement.");
 		
 		File[] tousLesFichiers = this.getListeFichiers();
 		
-		System.out.println(tousLesFichiers.length + " fichier(s) Ã  ranger.");
+		System.out.println(tousLesFichiers.length + " fichier(s) à  ranger.");
 		
 		int i = 0;
 		for(File f:tousLesFichiers){
@@ -234,7 +225,7 @@ public class FenetreRenomator extends JFrame implements MouseListener{
 		else{
 			//crÃ©er le dossier
 			if(dest.mkdir()){
-				System.out.println("Dossier " + nomDossier + " crÃ©Ã©.");
+				System.out.println("Dossier " + nomDossier + " créé.");
 				return nomDossier;
 			}
 		}
@@ -242,7 +233,7 @@ public class FenetreRenomator extends JFrame implements MouseListener{
 	}
 
 	private void traiterTousFichiers() {
-		System.out.println("DÃ©but du traitement.");
+		System.out.println("Début du traitement.");
 		
 		this.traiteur.setParametres(this.chkDoAddMajuscule.isSelected(), 
 				this.chkDooDeleteSpaces.isSelected(), 
@@ -263,7 +254,7 @@ public class FenetreRenomator extends JFrame implements MouseListener{
 					File dest = new File(this.selectedDir.getAbsolutePath() + File.separator + nouvNom);
 					if(!dest.exists()){
 					    f.renameTo(dest);
-					    System.out.println(nom + " renommÃ© en " + nouvNom);
+					    System.out.println(nom + " renommé en " + nouvNom);
 					    i++;
 					}
 				}
@@ -272,7 +263,7 @@ public class FenetreRenomator extends JFrame implements MouseListener{
 		
 		this.traitementAJour = true;
 
-		System.out.println("Fin du traitement. ( " + i + "/" + tousLesFichiers.length + " fichier(s) traitÃ©(s). )");
+		System.out.println("Fin du traitement. ( " + i + "/" + tousLesFichiers.length + " fichier(s) traité(s). )");
 		
 		this.refreshList();
 	}
@@ -295,7 +286,7 @@ public class FenetreRenomator extends JFrame implements MouseListener{
 			
 			this.traitementAJour = false;
 			
-			System.out.println("Nouveau dossier sÃ©lectionnÃ© :");
+			System.out.println("Nouveau dossier sélectionné :");
 			System.out.println(this.selectedDir.getAbsolutePath());
 			
 			this.refreshList();
@@ -303,11 +294,11 @@ public class FenetreRenomator extends JFrame implements MouseListener{
 	}
 
 	private void refreshList() {
-		System.out.println("Mise Ã  jour de la liste des fichiers.\n...");
+		System.out.println("Mise à  jour de la liste des fichiers.\n...");
 		this.textePathDossier.setText(this.selectedDir.getAbsolutePath());
 		Vector<String> lstNoms = this.getListeNomsFichiers();
 		this.listFichier.setListData(lstNoms);
-		System.out.println("Liste des fichiers mise Ã  jour. (" + lstNoms.size() + " fichier(s) )");
+		System.out.println("Liste des fichiers mise à  jour. (" + lstNoms.size() + " fichier(s) )");
 	}
 
 	private Vector<String> getListeNomsFichiers() {
