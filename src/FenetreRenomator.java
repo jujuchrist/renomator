@@ -5,8 +5,14 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -21,12 +27,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 
-public class FenetreRenomator extends JFrame implements MouseListener{
+public class FenetreRenomator extends JFrame implements MouseListener, WindowListener{
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final String FILENAMECONF = "datas";
 	private GridBagLayout layoutMain;
 	
 	private JButton btnChoixDossier;
@@ -47,6 +54,7 @@ public class FenetreRenomator extends JFrame implements MouseListener{
 	private JTextField motsSuppField;
 
 	public FenetreRenomator(){    
+		this.addWindowListener(this);
 		this.setTitle("");
 	    this.setMinimumSize(new Dimension(1000, 400));
 	    this.setLocationRelativeTo(null);            
@@ -159,6 +167,42 @@ public class FenetreRenomator extends JFrame implements MouseListener{
 	    this.traiteur = new TraiteurDeNoms();
 	    
 	    this.setVisible(true);
+	    readFilePersistant();
+	}
+
+	private void writeFilePersistant() {
+        try {
+            byte[] buffer = this.motsSuppField.getText().getBytes();
+
+            FileOutputStream outputStream = new FileOutputStream(FILENAMECONF);
+            outputStream.write(buffer);
+
+            outputStream.close();       
+        }
+        catch(IOException ex) {
+            ex.printStackTrace();
+        }
+	}
+
+	private void readFilePersistant() {
+		String listMots = "";
+		try {
+            byte[] buffer = new byte[1000];
+            FileInputStream inputStream = new FileInputStream(FILENAMECONF);
+
+            while(inputStream.read(buffer) != -1) {
+            	listMots += new String(buffer);
+            }   
+            inputStream.close();        
+
+        }
+        catch(FileNotFoundException ex) {
+        	ex.printStackTrace();               
+        }
+        catch(IOException ex) {
+            ex.printStackTrace();
+        }
+		this.motsSuppField.setText(listMots);
 	}
 
 	@Override
@@ -333,4 +377,41 @@ public class FenetreRenomator extends JFrame implements MouseListener{
 
 	@Override
 	public void mouseReleased(MouseEvent e) {}
+
+	@Override
+	public void windowActivated(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void windowClosed(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void windowClosing(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+	    writeFilePersistant();
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void windowIconified(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void windowOpened(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+		this.readFilePersistant();
+	}
 }
