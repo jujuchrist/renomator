@@ -7,11 +7,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Vector;
 
@@ -24,7 +26,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
+import javax.swing.JTextArea;
 
 
 public class FenetreRenomator extends JFrame implements MouseListener, WindowListener{
@@ -51,7 +53,7 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
 	private JCheckBox chkDooRemoveNonChar;
 	private JCheckBox chkDooRemoveAccolades;
 	private JCheckBox chkDooRemoveParentheses;
-	private JTextField motsSuppField;
+	private JTextArea motsSuppField;
 
 	public FenetreRenomator(){    
 		this.addWindowListener(this);
@@ -126,7 +128,7 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
 	    gbc.weighty = 1.0;
 	   /* this.getContentPane().add(this.motsSuppPanel = new JPanel(),gbc);
 	    this.confPanel.setLayout(new GridLayout(5,1));*/
-	    this.getContentPane().add(this.motsSuppField = new JTextField(),gbc);
+	    this.getContentPane().add(this.motsSuppField = new JTextArea(),gbc);
 	    this.motsSuppField.setPreferredSize(new Dimension(250, 30));
 		this.motsSuppField.setMinimumSize(new Dimension(250, 30));
 		this.motsSuppField.setMaximumSize(new Dimension(250, 30));
@@ -172,12 +174,17 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
 
 	private void writeFilePersistant() {
         try {
-            byte[] buffer = this.motsSuppField.getText().getBytes();
+            FileWriter fileWriter = new FileWriter(FILENAMECONF);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
-            FileOutputStream outputStream = new FileOutputStream(FILENAMECONF);
-            outputStream.write(buffer);
+            if(this.selectedDir!=null){
+            	bufferedWriter.write("**" + this.selectedDir.getAbsolutePath() + "**");
+            }
 
-            outputStream.close();       
+            bufferedWriter.write(this.motsSuppField.getText());
+            		
+            // Always close files.
+            bufferedWriter.close();
         }
         catch(IOException ex) {
             ex.printStackTrace();
@@ -186,22 +193,32 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
 
 	private void readFilePersistant() {
 		String listMots = "";
+		String ligne = "";
 		try {
-            byte[] buffer = new byte[1000];
-            FileInputStream inputStream = new FileInputStream(FILENAMECONF);
+            FileReader fileReader = new FileReader(FILENAMECONF);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-            while(inputStream.read(buffer) != -1) {
-            	listMots += new String(buffer);
+            while((ligne = bufferedReader.readLine()) != null) {
+            	listMots += ligne + "\n";
             }   
-            inputStream.close();        
+
+            bufferedReader.close();        
 
         }
         catch(FileNotFoundException ex) {
-        	ex.printStackTrace();               
+        	//ex.printStackTrace();               
         }
         catch(IOException ex) {
             ex.printStackTrace();
         }
+		if(listMots.matches("(?s)\\*\\*.+\\*\\*.*")){
+			int st, end;
+			st = listMots.indexOf("**")+2;
+			end = listMots.indexOf("**", st);
+			String filePath = listMots.substring(st, end);
+			this.setDirectory(new File(filePath));
+			listMots = listMots.substring(end+2);
+		}
 		this.motsSuppField.setText(listMots);
 	}
 
@@ -322,8 +339,12 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
 		JFileChooser fileChooser = new JFileChooser(this.selectedDir);
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		fileChooser.showDialog(this, "Choisir");
-		if(fileChooser.getSelectedFile() != null){
-			this.selectedDir  = fileChooser.getSelectedFile();
+		this.setDirectory(fileChooser.getSelectedFile());
+	}
+
+	private void setDirectory(File selectedFile) {
+		if(selectedFile != null){
+			this.selectedDir  = selectedFile;
 			if ( !this.selectedDir.isDirectory() ) {
 				this.selectedDir = this.selectedDir.getParentFile();
 			}
@@ -412,6 +433,5 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
 	@Override
 	public void windowOpened(WindowEvent arg0) {
 		// TODO Auto-generated method stub
-		this.readFilePersistant();
 	}
 }

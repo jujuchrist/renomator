@@ -17,7 +17,7 @@ public class TraiteurDeNoms {
 		nom = nom.substring(0, nom.lastIndexOf(".")).toLowerCase();
 		
 		for(int i = 0; i<this.remplacements.size()-1; i+=2){
-			nom = nom.replaceAll(this.remplacements.get(i).toLowerCase(), this.remplacements.get(i+1).toLowerCase());
+			nom = nom.replaceAll("(?i)" + this.remplacements.get(i).toLowerCase(), this.remplacements.get(i+1).toLowerCase());
 		}
 		
 		if(this.doRemoveParentheses)
@@ -63,7 +63,7 @@ public class TraiteurDeNoms {
 		String[] lstMots = pListMotsSuppr.split(";");
 		for(String mot : lstMots){
 			if(mot.trim() != "")
-				this.addRemplacement(mot, " ");
+				this.addRemplacement(mot.trim(), " ");
 		}
 	}
 
