@@ -1,5 +1,4 @@
 import java.util.Vector;
-//test git
 
 public class TraiteurDeNoms {
 	private Vector<String> remplacements = new Vector<String>();
@@ -77,7 +76,7 @@ public class TraiteurDeNoms {
 	}
 
 	private String nomSansNnChar(String nom) {
-		return nom.replaceAll("\\W"," ");
+		return nom.replaceAll("[\\W&&[^\\u00C0-\\u017F]]"," ");
 	}
 
 	private String nomSansEspacesExtrm(String nom) {
