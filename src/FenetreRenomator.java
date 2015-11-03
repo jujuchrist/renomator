@@ -24,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 
 
 public class FenetreRenomator extends JFrame implements MouseListener{
@@ -53,7 +54,7 @@ public class FenetreRenomator extends JFrame implements MouseListener{
 	private JCheckBox chkDooRemoveNonChar;
 	private JCheckBox chkDooRemoveAccolades;
 	private JCheckBox chkDooRemoveParentheses;
-	private JPanel motsSuppPanel;
+	private JTextField motsSuppField;
 
 	public FenetreRenomator(){    
 		this.setTitle("");
@@ -125,8 +126,12 @@ public class FenetreRenomator extends JFrame implements MouseListener{
 	    gbc.gridy = yGrid++;
 	    gbc.weightx = 1.0;
 	    gbc.weighty = 1.0;
-	    this.getContentPane().add(this.motsSuppPanel = new JPanel(),gbc);
-	    this.confPanel.setLayout(new GridLayout(5,1));
+	   /* this.getContentPane().add(this.motsSuppPanel = new JPanel(),gbc);
+	    this.confPanel.setLayout(new GridLayout(5,1));*/
+	    this.getContentPane().add(this.motsSuppField = new JTextField(),gbc);
+	    this.motsSuppField.setPreferredSize(new Dimension(250, 30));
+		this.motsSuppField.setMinimumSize(new Dimension(250, 30));
+		this.motsSuppField.setMaximumSize(new Dimension(250, 30));
 
 	    //--
 	    gbc.gridwidth = 1;
@@ -243,7 +248,8 @@ public class FenetreRenomator extends JFrame implements MouseListener{
 				this.chkDooDeleteSpaces.isSelected(), 
 				this.chkDooRemoveNonChar.isSelected(), 
 				this.chkDooRemoveAccolades.isSelected(), 
-				this.chkDooRemoveParentheses.isSelected());
+				this.chkDooRemoveParentheses.isSelected(),
+				this.motsSuppField.getText());
 		
 		File[] tousLesFichiers = this.getListeFichiers();
 		
