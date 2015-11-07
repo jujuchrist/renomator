@@ -60,6 +60,7 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
 	private JCheckBox chkDoRemoveAccolades;
 	private JCheckBox chkDoRemoveParentheses;
 	private JCheckBox chkDoRemoveDate;
+	private JCheckBox chkDoRemoveListeMots;
 	private JCheckBox chkDoRemoveAfterAny;
 	private JTextArea motsSuppField;
 
@@ -69,7 +70,8 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
 		this.addWindowListener(this);
 		this.setTitle("Rennomator");
 	    this.setMinimumSize(new Dimension(1000, 600));
-	    this.setLocationRelativeTo(null);            
+	    this.setLocationRelativeTo(null);         
+	    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	 
 	    this.layoutMain = new GridBagLayout();
 	    this.setLayout(this.layoutMain);
@@ -117,17 +119,19 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
 	    this.chkDoRemoveAccolades = new JCheckBox("Supprimer accolades");
 	    this.chkDoRemoveParentheses = new JCheckBox("Supprimer parenthèses");
 	    this.chkDoRemoveDate = new JCheckBox("Supprimer dates");
+	    this.chkDoRemoveListeMots = new JCheckBox("Supprimer les mots de la liste");
 	    this.chkDoRemoveAfterAny = new JCheckBox("Supprimer tout après l'un des précédants");
-	    
+	    		
 	    this.chkDoAddMajuscule.setSelected(true);
 	    this.chkDoDeleteSpaces.setSelected(true);
 	    this.chkDoRemoveNonChar.setSelected(true);
 	    this.chkDoRemoveAccolades.setSelected(true);
 	    this.chkDoRemoveParentheses.setSelected(true);
 	    this.chkDoRemoveDate.setSelected(true);
+	    this.chkDoRemoveListeMots.setSelected(true);
 	    this.chkDoRemoveAfterAny.setSelected(false);
 	    
-	    this.confPanel.setLayout(new GridLayout(7,1));
+	    this.confPanel.setLayout(new GridLayout(8,1));
 	    
 	    this.confPanel.add(chkDoAddMajuscule);
 	    this.confPanel.add(chkDoDeleteSpaces);
@@ -135,6 +139,7 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
 	    this.confPanel.add(chkDoRemoveAccolades);
 	    this.confPanel.add(chkDoRemoveParentheses);
 	    this.confPanel.add(chkDoRemoveDate);
+	    this.confPanel.add(chkDoRemoveListeMots);
 	    this.confPanel.add(chkDoRemoveAfterAny);
 	    
 	    //--liste des mots Ã  supprimer
@@ -327,6 +332,7 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
 				this.chkDoRemoveAccolades.isSelected(), 
 				this.chkDoRemoveParentheses.isSelected(),
 				this.chkDoRemoveDate.isSelected(),
+				this.chkDoRemoveListeMots.isSelected(),
 				this.chkDoRemoveAfterAny.isSelected(),
 				this.motsSuppField.getText());
 		

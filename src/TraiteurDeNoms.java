@@ -9,6 +9,7 @@ public class TraiteurDeNoms {
 	private boolean doRemoveAccolades = true;
 	private boolean doRemoveParentheses = true;
 	private boolean doRemoveDates = true;
+	private boolean doRemoveListeMots = true;
 	private boolean doRemoveAfterAny = false;
 	
 	public String traiter(String nom) {
@@ -18,10 +19,12 @@ public class TraiteurDeNoms {
 		String extension = nom.substring(nom.lastIndexOf("."));
 		nom = nom.substring(0, nom.lastIndexOf(".")).toLowerCase();
 		
-		for(int i = 0; i<this.remplacements.size()-1; i+=2){
-			if(this.doRemoveAfterAny)
-				nom = nom.replaceAll("(?i)" + this.remplacements.get(i).toLowerCase() + ".*", this.remplacements.get(i+1).toLowerCase());
-			nom = nom.replaceAll("(?i)" + this.remplacements.get(i).toLowerCase(), this.remplacements.get(i+1).toLowerCase());
+		if(doRemoveListeMots){
+			for(int i = 0; i<this.remplacements.size()-1; i+=2){
+				if(this.doRemoveAfterAny)
+					nom = nom.replaceAll("(?i)" + this.remplacements.get(i).toLowerCase() + ".*", this.remplacements.get(i+1).toLowerCase());
+				nom = nom.replaceAll("(?i)" + this.remplacements.get(i).toLowerCase(), this.remplacements.get(i+1).toLowerCase());
+			}
 		}
 		
 		if(this.doRemoveParentheses)
@@ -67,7 +70,8 @@ public class TraiteurDeNoms {
 			boolean pDoRemoveAccolades, 
 			boolean pDoRemoveParentheses, 
 			boolean pDoRemoveDates, 
-			boolean pDoRemoveAfterAny, 
+			boolean pDoRemoveAfterAny,
+			boolean pDoRemoveListeMots,
 			String pListMotsSuppr){
 		doAddMajuscule = pDoAddMajuscule;
 		doDeleteSpaces = pDoDeleteSpaces;
@@ -75,6 +79,7 @@ public class TraiteurDeNoms {
 		doRemoveAccolades = pDoRemoveAccolades;
 		doRemoveParentheses = pDoRemoveParentheses;
 		doRemoveDates = pDoRemoveDates;
+		doRemoveListeMots = pDoRemoveListeMots;
 		doRemoveAfterAny = pDoRemoveAfterAny;
 		this.remplacements.clear();
 		
