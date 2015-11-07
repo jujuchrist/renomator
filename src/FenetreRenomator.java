@@ -301,7 +301,7 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
 
 	private String getDossierRangement(String nom) {
 		String nomDossier = nom.substring(0, 1).toUpperCase();
-		Pattern p = Pattern.compile("(?i)((le(s)?)*(la)*(un(e)?)*(des)*\\s).*");
+		Pattern p = Pattern.compile("(?i)((le(s)?)*(la)*(un(e)?)*(des)*(the)*\\s).*");
 		Matcher m = p.matcher(nom);
 		if(m.matches() && m.groupCount()>=1 && m.group(1) != null){
 			System.out.println("match");
