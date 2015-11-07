@@ -343,12 +343,19 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
 			if(f.isFile()){
 				String nom = this.getFileName(f);
 				String nouvNom = this.traiteur.traiter(nom);
-	
+				
 				if(!nouvNom.equals("") && !nom.equals(nouvNom)){
 					File dest = new File(this.selectedDir.getAbsolutePath() + File.separator + nouvNom);
 					if(!dest.exists()){
 					    f.renameTo(dest);
 					    System.out.println(nom + " renommé en " + nouvNom);
+					    i++;
+					}
+					else if(!f.getAbsolutePath().equals(dest.getAbsolutePath())){
+						File dest2 = new File(this.selectedDir.getAbsolutePath() + File.separator + "MAJTOADD" + nouvNom);
+						f.renameTo(dest2);
+						dest2.renameTo(dest);
+						System.out.println(nom + " renommé en " + nouvNom);
 					    i++;
 					}
 				}

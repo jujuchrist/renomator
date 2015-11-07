@@ -23,7 +23,8 @@ public class TraiteurDeNoms {
 			for(int i = 0; i<this.remplacements.size()-1; i+=2){
 				if(this.doRemoveAfterAny)
 					nom = nom.replaceAll("(?i)" + this.remplacements.get(i).toLowerCase() + ".*", this.remplacements.get(i+1).toLowerCase());
-				nom = nom.replaceAll("(?i)" + this.remplacements.get(i).toLowerCase(), this.remplacements.get(i+1).toLowerCase());
+				else
+					nom = nom.replaceAll("(?i)" + this.remplacements.get(i).toLowerCase(), this.remplacements.get(i+1).toLowerCase());
 			}
 		}
 		
@@ -70,8 +71,8 @@ public class TraiteurDeNoms {
 			boolean pDoRemoveAccolades, 
 			boolean pDoRemoveParentheses, 
 			boolean pDoRemoveDates, 
-			boolean pDoRemoveAfterAny,
 			boolean pDoRemoveListeMots,
+			boolean pDoRemoveAfterAny,
 			String pListMotsSuppr){
 		doAddMajuscule = pDoAddMajuscule;
 		doDeleteSpaces = pDoDeleteSpaces;
