@@ -307,6 +307,8 @@ public class FenetreRenomator extends JFrame implements MouseListener, WindowLis
 			System.out.println("match");
 			nomDossier = nom.substring(m.group(1).length(),m.group(1).length()+1).toUpperCase();
 		}
+		if(nomDossier.matches("\\d"))
+			nomDossier = "0-9";
 		File dest = new File(this.selectedDir.getAbsolutePath() + File.separator + nomDossier);
 		if(dest.exists()){
 			if(dest.isDirectory()){
